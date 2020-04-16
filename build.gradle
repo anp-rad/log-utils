@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'io.freefair.aspectj.post-compile-weaving' version '4.1.6'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Log Utils',
+                'Implementation-Version': "${getArchiveVersion()}"
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testAspect project(':')
+
+    implementation('org.aspectj:aspectjrt:1.9.5')
+    implementation('ch.qos.logback:logback-classic:1.2.3')
+    implementation('org.apache.logging.log4j:log4j-core:2.13.0')
+
+    testImplementation('junit:junit:4.12')
+    testImplementation('org.assertj:assertj-core:3.14.0')
+}
+
+// The pointcut advices defined in this module is applied in other modules.
+// So suppress "adviceDidNotMatch" warning message from the compiler output
+compileJava.ajc.options.compilerArgs += "-Xlint:adviceDidNotMatch=ignore"
